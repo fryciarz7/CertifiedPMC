@@ -1,4 +1,10 @@
-﻿using SPTarkov.Server.Core.Models.Spt.Mod;
+﻿using SPTarkov.DI.Annotations;
+using SPTarkov.Server.Core.Helpers;
+using SPTarkov.Server.Core.Models.Common;
+using SPTarkov.Server.Core.Models.Eft.Bot;
+using SPTarkov.Server.Core.Models.Spt.Mod;
+using SPTarkov.Server.Core.Models.Utils;
+using SPTarkov.Server.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,4 +24,14 @@ public record ModMetadata : AbstractModMetadata
     public override string? Url { get; init; }
     public override bool? IsBundleMod { get; init; }
     public override string? License { get; init; } = "Creative Commons BY-NC-SA 3.0";
+}
+
+[Injectable]
+public class CertifiedPMCPlugin(ISptLogger<CertifiedPMCPlugin> logger, ModHelper modHelper, HttpResponseUtil httpResponseUtil, CertifiedPMC cpmc)
+{
+    public ValueTask<string> HandleCharacterCreation(string url, GenerateBotsRequestData info, MongoId sessionId, string? output)
+    {
+        cpmc.ModifySkills();
+        return new ValueTask<string>(output ?? string.Empty);
+    }
 }
