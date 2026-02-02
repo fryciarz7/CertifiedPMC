@@ -1,7 +1,9 @@
 ﻿using SPTarkov.DI.Annotations;
+using SPTarkov.Server.Core.DI;
 using SPTarkov.Server.Core.Helpers;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Bot;
+using SPTarkov.Server.Core.Models.Eft.Profile;
 using SPTarkov.Server.Core.Models.Spt.Mod;
 using SPTarkov.Server.Core.Models.Utils;
 using SPTarkov.Server.Core.Utils;
@@ -27,9 +29,25 @@ public record ModMetadata : AbstractModMetadata
 }
 
 [Injectable]
+public class CertifiedPMCRoute(JsonUtil jsonUtil, CertifiedPMCPlugin callbacks) : StaticRouter(
+    jsonUtil, [
+        new RouteAction<ProfileCreateRequestData>(
+            "/client/game/profile/create",
+            async (
+                url,
+                info,
+                sessionId,
+                output
+                ) => await callbacks.ModifySkillsAsync(url, info, sessionId, output)
+            )
+        ]
+    )
+{ }
+
+[Injectable]
 public class CertifiedPMCPlugin(ISptLogger<CertifiedPMCPlugin> logger, ModHelper modHelper, HttpResponseUtil httpResponseUtil, CertifiedPMC cpmc)
 {
-    public ValueTask<string> HandleCharacterCreation(string url, GenerateBotsRequestData info, MongoId sessionId, string? output)
+    public ValueTask<string> ModifySkillsAsync(string url, ProfileCreateRequestData info, MongoId sessionId, string? output)
     {
         cpmc.ModifySkills();
         return new ValueTask<string>(output ?? string.Empty);
