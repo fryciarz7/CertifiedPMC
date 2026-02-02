@@ -10,6 +10,8 @@ using SPTarkov.Server.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace CertifiedPMC;
 public record ModMetadata : AbstractModMetadata
@@ -49,6 +51,8 @@ public class CertifiedPMCPlugin(ISptLogger<CertifiedPMCPlugin> logger, ModHelper
 {
     public ValueTask<string> ModifySkillsAsync(string url, ProfileCreateRequestData info, MongoId sessionId, string? output)
     {
+        string json = JsonSerializer.Serialize(info);
+        File.WriteAllText("ProfileCreateRequestData.json", json);
         cpmc.ModifySkills();
         return new ValueTask<string>(output ?? string.Empty);
     }
