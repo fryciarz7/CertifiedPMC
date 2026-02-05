@@ -11,6 +11,9 @@ namespace CertifiedPMC
         private readonly SaveServer _saveServer;
         private readonly ISptLogger<CertifiedPMC> _logger;
 
+        private int minValue = 0;
+        private int maxValue = 5100;
+
         public CertifiedPMC(SaveServer saveServer, ISptLogger<CertifiedPMC> logger) 
         {
             _saveServer = saveServer;
