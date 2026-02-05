@@ -1,7 +1,12 @@
 ﻿using SPTarkov.DI.Annotations;
+using SPTarkov.Server.Core.Models.Common;
+using SPTarkov.Server.Core.Models.Enums;
+using SPTarkov.Server.Core.Models.Utils;
+using SPTarkov.Server.Core.Servers;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 
 namespace CertifiedPMC
 {
@@ -24,6 +29,14 @@ namespace CertifiedPMC
         public void ModifySkills(MongoId sessionId)
         {
             var profile = _saveServer.GetProfile(sessionId);
+
+            var commonSkills = profile.CharacterData.PmcData.Skills.Common;
+            foreach (var skill in commonSkills)
+            {
+                Random rand = new Random();
+                skill.Progress = rand.Next(minValue, maxValue);
+                _logger.Info($"According to documentation your {skill.Id} is {skill.Progress}.");
+            }
         }
     }
 }
