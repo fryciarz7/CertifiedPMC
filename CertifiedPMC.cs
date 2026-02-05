@@ -34,6 +34,7 @@ namespace CertifiedPMC
         {
             SptProfile? profile = _saveServer.GetProfile(sessionId);
             ModifySkills(profile);
+            ModifyWeaponMasteries(profile);
         }
 
         private void ModifySkills(SptProfile profile)
@@ -45,6 +46,11 @@ namespace CertifiedPMC
                 skill.Progress = rand.Next(skillMinValue, skillMaxValue);
                 _logger.Info($"According to documentation your {skill.Id} is {skill.Progress}.");
             }
+        }
+
+        private void ModifyWeaponMasteries(SptProfile profile)
+        {
+            throw new NotImplementedException();
         }
     }
 }
