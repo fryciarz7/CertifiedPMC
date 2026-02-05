@@ -1,5 +1,7 @@
 ﻿using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Models.Common;
+using SPTarkov.Server.Core.Models.Eft.Common.Tables;
+using SPTarkov.Server.Core.Models.Eft.Profile;
 using SPTarkov.Server.Core.Models.Enums;
 using SPTarkov.Server.Core.Models.Utils;
 using SPTarkov.Server.Core.Servers;
@@ -28,13 +30,13 @@ namespace CertifiedPMC
 
         public void Modify(MongoId sessionId)
         {
-            var profile = _saveServer.GetProfile(sessionId);
+            SptProfile? profile = _saveServer.GetProfile(sessionId);
             ModifySkills(profile);
         }
 
         private void ModifySkills(SPTarkov.Server.Core.Models.Eft.Profile.SptProfile profile)
         {
-            var commonSkills = profile.CharacterData.PmcData.Skills.Common;
+            IEnumerable<CommonSkill> commonSkills = profile.CharacterData.PmcData.Skills.Common;
             foreach (var skill in commonSkills)
             {
                 Random rand = new Random();
