@@ -26,7 +26,7 @@ namespace CertifiedPMC
         }
 
 
-        public void ModifySkills(MongoId sessionId)
+        public void Modify(MongoId sessionId)
         {
             var profile = _saveServer.GetProfile(sessionId);
 
