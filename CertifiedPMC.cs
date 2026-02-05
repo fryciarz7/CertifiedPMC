@@ -18,6 +18,8 @@ namespace CertifiedPMC
         private readonly SaveServer _saveServer;
         private readonly ISptLogger<CertifiedPMC> _logger;
 
+        private const string LogPrefix = "[CertifiedPMC] ";
+
         private int skillMinValue = 0;
         private int skillMaxValue = 5100;
         private int masteMinValue = 0;
