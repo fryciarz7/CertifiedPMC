@@ -51,9 +51,7 @@ public class CertifiedPMCPlugin(ISptLogger<CertifiedPMCPlugin> logger, ModHelper
 {
     public ValueTask<string> ModifySkillsAsync(string url, ProfileCreateRequestData info, MongoId sessionId, string? output)
     {
-        string json = JsonSerializer.Serialize(info);
-        File.WriteAllText("ProfileCreateRequestData.json", json);
-        cpmc.ModifySkills();
+        cpmc.ModifySkills(sessionId);
         return new ValueTask<string>(output ?? string.Empty);
     }
 }
