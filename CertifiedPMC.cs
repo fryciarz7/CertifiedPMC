@@ -6,6 +6,7 @@ using SPTarkov.Server.Core.Models.Eft.Profile;
 using SPTarkov.Server.Core.Models.Enums;
 using SPTarkov.Server.Core.Models.Utils;
 using SPTarkov.Server.Core.Servers;
+using SPTarkov.Server.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,6 +18,7 @@ namespace CertifiedPMC
     public class CertifiedPMC
     {
         private readonly SaveServer _saveServer;
+        private readonly RandomUtil _randomUtil;
         private readonly ISptLogger<CertifiedPMC> _logger;
 
         private const string LogPrefix = "[CertifiedPMC] ";
@@ -26,9 +28,10 @@ namespace CertifiedPMC
         private int masteMinValue = 0;
         private int masteMaxValue = 1000;
 
-        public CertifiedPMC(SaveServer saveServer, ISptLogger<CertifiedPMC> logger) 
+        public CertifiedPMC(SaveServer saveServer, RandomUtil randomUtil, ISptLogger<CertifiedPMC> logger) 
         {
             _saveServer = saveServer;
+            _randomUtil = randomUtil;
             _logger = logger;
         }
 
@@ -45,8 +48,7 @@ namespace CertifiedPMC
             IEnumerable<CommonSkill> commonSkills = profile.CharacterData.PmcData.Skills.Common;
             foreach (var skill in commonSkills)
             {
-                Random rand = new Random();
-                skill.Progress = rand.Next(skillMinValue, skillMaxValue);
+                skill.Progress = _randomUtil.GetInt(skillMinValue, skillMaxValue);
                 _logger.Info($"{LogPrefix}According to documentation your {skill.Id} is at {Math.Floor(skill.Progress / 100)} level.");
             }
         }
