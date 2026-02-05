@@ -18,8 +18,8 @@ namespace CertifiedPMC
         private readonly SaveServer _saveServer;
         private readonly ISptLogger<CertifiedPMC> _logger;
 
-        private int minValue = 0;
-        private int maxValue = 5100;
+        private int skillMinValue = 0;
+        private int skillMaxValue = 5100;
 
         public CertifiedPMC(SaveServer saveServer, ISptLogger<CertifiedPMC> logger) 
         {
@@ -40,7 +40,7 @@ namespace CertifiedPMC
             foreach (var skill in commonSkills)
             {
                 Random rand = new Random();
-                skill.Progress = rand.Next(minValue, maxValue);
+                skill.Progress = rand.Next(skillMinValue, skillMaxValue);
                 _logger.Info($"According to documentation your {skill.Id} is {skill.Progress}.");
             }
         }
