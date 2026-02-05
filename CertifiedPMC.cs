@@ -29,7 +29,11 @@ namespace CertifiedPMC
         public void Modify(MongoId sessionId)
         {
             var profile = _saveServer.GetProfile(sessionId);
+            ModifySkills(profile);
+        }
 
+        private void ModifySkills(SPTarkov.Server.Core.Models.Eft.Profile.SptProfile profile)
+        {
             var commonSkills = profile.CharacterData.PmcData.Skills.Common;
             foreach (var skill in commonSkills)
             {
