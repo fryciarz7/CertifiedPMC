@@ -50,7 +50,12 @@ namespace CertifiedPMC
 
         private void ModifyWeaponMasteries(SptProfile profile)
         {
-            throw new NotImplementedException();
+            var weaponMasteries = profile.CharacterData.PmcData.Skills?.Mastering;
+            _logger.Info($"Modifying weapon masteries... {weaponMasteries?.Count()}");
+            foreach (var skill in weaponMasteries)
+            {
+                _logger.Info($"According to documentation your {skill.Id} is {skill.Progress}.");
+            }
         }
     }
 }
