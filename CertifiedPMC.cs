@@ -44,7 +44,7 @@ namespace CertifiedPMC
             {
                 Random rand = new Random();
                 skill.Progress = rand.Next(skillMinValue, skillMaxValue);
-                _logger.Info($"According to documentation your {skill.Id} is {skill.Progress}.");
+                _logger.Info($"According to documentation your {skill.Id} is at {Math.Floor(skill.Progress / 100)} level.");
             }
         }
 
