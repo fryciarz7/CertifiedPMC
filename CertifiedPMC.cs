@@ -34,7 +34,7 @@ namespace CertifiedPMC
             ModifySkills(profile);
         }
 
-        private void ModifySkills(SPTarkov.Server.Core.Models.Eft.Profile.SptProfile profile)
+        private void ModifySkills(SptProfile profile)
         {
             IEnumerable<CommonSkill> commonSkills = profile.CharacterData.PmcData.Skills.Common;
             foreach (var skill in commonSkills)
