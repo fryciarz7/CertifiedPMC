@@ -1,5 +1,6 @@
 ﻿using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Models.Common;
+using SPTarkov.Server.Core.Models.Eft.Common;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
 using SPTarkov.Server.Core.Models.Eft.Profile;
 using SPTarkov.Server.Core.Models.Enums;
@@ -46,17 +47,17 @@ namespace CertifiedPMC
             {
                 Random rand = new Random();
                 skill.Progress = rand.Next(skillMinValue, skillMaxValue);
-                _logger.Info($"According to documentation your {skill.Id} is at {Math.Floor(skill.Progress / 100)} level.");
+                _logger.Info($"{LogPrefix}According to documentation your {skill.Id} is at {Math.Floor(skill.Progress / 100)} level.");
             }
         }
 
         private void ModifyWeaponMasteries(SptProfile profile)
         {
             var weaponMasteries = profile.CharacterData.PmcData.Skills?.Mastering;
-            _logger.Info($"Modifying weapon masteries... {weaponMasteries?.Count()}");
+            _logger.Info($"{LogPrefix}Modifying weapon masteries... {weaponMasteries?.Count()}");
             foreach (var skill in weaponMasteries)
-            {
-                _logger.Info($"According to documentation your {skill.Id} is {skill.Progress}.");
+            {                
+                _logger.Info($"{LogPrefix}According to documentation your {skill.Id} is {skill.Progress}.");
             }
         }
     }
