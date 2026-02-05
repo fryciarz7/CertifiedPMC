@@ -8,7 +8,14 @@ namespace CertifiedPMC
     [Injectable]
     public class CertifiedPMC
     {
-        public CertifiedPMC() { }
+        private readonly SaveServer _saveServer;
+        private readonly ISptLogger<CertifiedPMC> _logger;
+
+        public CertifiedPMC(SaveServer saveServer, ISptLogger<CertifiedPMC> logger) 
+        {
+            _saveServer = saveServer;
+            _logger = logger;
+        }
 
 
         public void ModifySkills()
