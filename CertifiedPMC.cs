@@ -20,6 +20,8 @@ namespace CertifiedPMC
 
         private int skillMinValue = 0;
         private int skillMaxValue = 5100;
+        private int masteMinValue = 0;
+        private int masteMaxValue = 1000;
 
         public CertifiedPMC(SaveServer saveServer, ISptLogger<CertifiedPMC> logger) 
         {
