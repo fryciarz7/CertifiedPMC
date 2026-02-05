@@ -18,9 +18,9 @@ namespace CertifiedPMC
         }
 
 
-        public void ModifySkills()
+        public void ModifySkills(MongoId sessionId)
         {
-            // Implementation for modifying skills goes here
+            var profile = _saveServer.GetProfile(sessionId);
         }
     }
 }
