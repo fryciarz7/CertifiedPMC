@@ -1,4 +1,6 @@
-﻿using SPTarkov.DI.Annotations;
+﻿using CertifiedPMC.config;
+using SPTarkov.DI.Annotations;
+using SPTarkov.Server.Core.Helpers;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Common;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
@@ -9,6 +11,7 @@ using SPTarkov.Server.Core.Servers;
 using SPTarkov.Server.Core.Utils;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 
@@ -54,9 +57,13 @@ namespace CertifiedPMC
             IEnumerable<CommonSkill> commonSkills = profile.CharacterData.PmcData.Skills.Common;
             foreach (var skill in commonSkills)
             {
+                _config.Skills.TryGetValue(skill.Id, out bool enabled);
+                if (enabled)
+                {
                 skill.Progress = _randomUtil.GetInt(skillMinValue, skillMaxValue);
                 _logger.Info($"{LogPrefix}According to documentation your {skill.Id} is at {Math.Floor(skill.Progress / 100)} level.");
             }
+        }
         }
 
         private void ModifyWeaponMasteries(SptProfile profile)
