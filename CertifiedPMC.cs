@@ -42,6 +42,11 @@ namespace CertifiedPMC
 
             string? pathToMod = _modHelper.GetAbsolutePathToModFolder(Assembly.GetExecutingAssembly());
             _config = _modHelper.GetJsonDataFromFile<ConfigJson>(pathToMod, "config/config.json");
+
+            skillMinValue = _config.minSkillLevel;
+            skillMaxValue = _config.maxSkillLevel;
+            masteMinValue = _config.minMasteringLevel;
+            masteMaxValue = _config.maxMasteringLevel;
         }
 
 
