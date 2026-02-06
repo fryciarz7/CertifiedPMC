@@ -47,9 +47,12 @@ namespace CertifiedPMC
 
         public void Modify(MongoId sessionId)
         {
+            if (_config.enabled)
+            {
             SptProfile? profile = _saveServer.GetProfile(sessionId);
             ModifySkills(profile);
             ModifyWeaponMasteries(profile);
+        }
         }
 
         private void ModifySkills(SptProfile profile)
