@@ -18,6 +18,7 @@ namespace CertifiedPMC
     public class CertifiedPMC
     {
         private readonly SaveServer _saveServer;
+        private readonly ModHelper _modHelper;
         private readonly RandomUtil _randomUtil;
         private readonly ISptLogger<CertifiedPMC> _logger;
 
@@ -28,9 +29,10 @@ namespace CertifiedPMC
         private int masteMinValue = 0;
         private int masteMaxValue = 1000;
 
-        public CertifiedPMC(SaveServer saveServer, RandomUtil randomUtil, ISptLogger<CertifiedPMC> logger) 
+        public CertifiedPMC(SaveServer saveServer, ModHelper modHelper, RandomUtil randomUtil, ISptLogger<CertifiedPMC> logger) 
         {
             _saveServer = saveServer;
+            _modHelper = modHelper;
             _randomUtil = randomUtil;
             _logger = logger;
         }
