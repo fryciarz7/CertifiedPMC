@@ -22,6 +22,7 @@ namespace CertifiedPMC
         private readonly RandomUtil _randomUtil;
         private readonly ISptLogger<CertifiedPMC> _logger;
 
+        private readonly ConfigJson _config;
         private const string LogPrefix = "[CertifiedPMC] ";
 
         private int skillMinValue = 0;
@@ -35,6 +36,9 @@ namespace CertifiedPMC
             _modHelper = modHelper;
             _randomUtil = randomUtil;
             _logger = logger;
+
+            string? pathToMod = _modHelper.GetAbsolutePathToModFolder(Assembly.GetExecutingAssembly());
+            _config = _modHelper.GetJsonDataFromFile<ConfigJson>(pathToMod, "config/config.json");
         }
 
 
