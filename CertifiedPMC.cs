@@ -85,7 +85,8 @@ namespace CertifiedPMC
                 _logger.Info($"{LogPrefix}Modifying weapon masteries for {profile.CharacterData.PmcData.Info.Side} faction.");
                 weaponList = profile.CharacterData.PmcData.Info.Side == "Bear" ? _config.Mastering.Bear : _config.Mastering.USEC;
             }
-            else            {
+            else
+            {
                 _logger.Info($"{LogPrefix}Modifying weapon masteries for both factions.");
                 weaponList = _config.Mastering.Bear.Union(_config.Mastering.USEC).Distinct().ToArray();
             }
