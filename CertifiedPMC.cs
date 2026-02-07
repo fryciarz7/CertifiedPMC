@@ -83,5 +83,14 @@ namespace CertifiedPMC
                 _logger.Info($"{LogPrefix}According to documentation your {skill.Id} is {skill.Progress}.");
             }
         }
+
+        private MasterySkill CreateMasterySkill(string id)
+        {
+            return new MasterySkill
+            {
+                Id = id,
+                Progress = _randomUtil.GetInt(masteMinValue, masteMaxValue)
+            };
+        }
     }
 }
