@@ -79,8 +79,12 @@ namespace CertifiedPMC
             profile.CharacterData.PmcData.Skills.Mastering = new List<MasterySkill>();
 
             List<MasterySkill> listOfSkills = new List<MasterySkill>();
-            _logger.Info($"{LogPrefix}Modifying weapon masteries for {profile.CharacterData.PmcData.Info.Side} faction.");
-            string[] weaponList = profile.CharacterData.PmcData.Info.Side == "Bear" ? _config.Mastering.Bear : _config.Mastering.USEC;
+            string[] weaponList = [];
+            if (_config.Mastering.SplitByFaction)
+            {
+                _logger.Info($"{LogPrefix}Modifying weapon masteries for {profile.CharacterData.PmcData.Info.Side} faction.");
+                weaponList = profile.CharacterData.PmcData.Info.Side == "Bear" ? _config.Mastering.Bear : _config.Mastering.USEC;
+            }
             foreach (string weapon in weaponList)
             {
                 listOfSkills.Add(CreateMasterySkill(weapon));
