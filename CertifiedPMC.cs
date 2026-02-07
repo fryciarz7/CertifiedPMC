@@ -54,10 +54,10 @@ namespace CertifiedPMC
         {
             if (_config.enabled)
             {
-            SptProfile? profile = _saveServer.GetProfile(sessionId);
-            ModifySkills(profile);
-            ModifyWeaponMasteries(profile);
-        }
+                SptProfile? profile = _saveServer.GetProfile(sessionId);
+                ModifySkills(profile);
+                ModifyWeaponMasteries(profile);
+            }
         }
 
         private void ModifySkills(SptProfile profile)
@@ -68,17 +68,30 @@ namespace CertifiedPMC
                 _config.Skills.TryGetValue(skill.Id, out bool enabled);
                 if (enabled)
                 {
-                skill.Progress = _randomUtil.GetInt(skillMinValue, skillMaxValue);
-                _logger.Info($"{LogPrefix}According to documentation your {skill.Id} is at {Math.Floor(skill.Progress / 100)} level.");
+                    skill.Progress = _randomUtil.GetInt(skillMinValue, skillMaxValue);
+                    _logger.Info($"{LogPrefix}According to documentation your {skill.Id} is at {Math.Floor(skill.Progress / 100)} level.");
+                }
             }
-        }
         }
 
         private void ModifyWeaponMasteries(SptProfile profile)
         {
-            var weaponMasteries = profile.CharacterData.PmcData.Skills?.Mastering;
-            _logger.Info($"{LogPrefix}Modifying weapon masteries... {weaponMasteries?.Count()}");
-            foreach (var skill in weaponMasteries)
+            profile.CharacterData.PmcData.Skills.Mastering = new List<MasterySkill>();
+
+            List<MasterySkill> listOfSkills = new List<MasterySkill>();
+            _logger.Info($"{LogPrefix}Modifying weapon masteries for {profile.CharacterData.PmcData.Info.Side} faction.");
+            string[] weaponList = profile.CharacterData.PmcData.Info.Side == "Bear" ? _config.Mastering.Bear : _config.Mastering.USEC;
+            foreach (string weapon in weaponList)
+            {
+                listOfSkills.Add(CreateMasterySkill(weapon));
+            }
+
+            if (profile.CharacterData.PmcData.Skills != null)
+            {
+                profile.CharacterData.PmcData.Skills.Mastering = listOfSkills;
+            }
+
+            foreach (MasterySkill? skill in profile.CharacterData.PmcData.Skills?.Mastering)
             {                
                 _logger.Info($"{LogPrefix}According to documentation your {skill.Id} is {skill.Progress}.");
             }
