@@ -1,14 +1,18 @@
-﻿using SPTarkov.DI.Annotations;
+﻿using CertifiedPMC.config;
+using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
 using SPTarkov.Server.Core.Helpers;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Bot;
+using SPTarkov.Server.Core.Models.Eft.Common.Tables;
 using SPTarkov.Server.Core.Models.Eft.Profile;
 using SPTarkov.Server.Core.Models.Spt.Mod;
 using SPTarkov.Server.Core.Models.Utils;
+using SPTarkov.Server.Core.Servers;
 using SPTarkov.Server.Core.Utils;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -30,6 +34,60 @@ public record ModMetadata : AbstractModMetadata
     public override string? License { get; init; } = "Creative Commons BY-NC-SA 3.0";
 }
 
+#if DEBUG
+[Injectable(TypePriority = OnLoadOrder.PostSptModLoader)] // Can also give an int value for fine-grained control
+public class OnLoadExample(SaveServer saveServer,
+    ModHelper modHelper,
+    ISptLogger<OnLoadExample> logger) : IOnLoad // Must implement the IOnLoad interface
+{
+    private const string LogPrefix = "[CertifiedPMC] ";
+    public Task OnLoad()
+    {
+        // Can do work here
+
+        string? pathToMod = modHelper.GetAbsolutePathToModFolder(Assembly.GetExecutingAssembly());
+        ConfigJson config = modHelper.GetJsonDataFromFile<ConfigJson>(pathToMod, "config/config.json");
+        // logger.Info($"{LogPrefix}Config loaded: {JsonSerializer.Serialize(config)}");
+
+        foreach (var (key, value) in config.Skills)
+        {
+            logger.Info($"{LogPrefix}Skill: {key} is {(value ? "enabled" : "disabled")}.");
+        }
+
+        return Task.CompletedTask;
+
+        var profiles = saveServer.GetProfiles();
+        logger.Info($"{LogPrefix}Found {profiles.Count} profiles in the database.");
+        foreach (var kvp in profiles)
+        {
+            SptProfile? profile = kvp.Value;
+            IEnumerable<MasterySkill>? weaponMasteries = profile.CharacterData.PmcData.Skills?.Mastering;
+            logger.Info($"{LogPrefix}Reading weapon masteries... {weaponMasteries?.Count()}");
+            string json = JsonSerializer.Serialize(weaponMasteries,
+                        new JsonSerializerOptions
+                        {
+                            WriteIndented = true
+                        }); // string.Empty;
+            logger.Info(json);
+
+            foreach (var skill in weaponMasteries)
+            {
+                //json += JsonSerializer.Serialize(skill);
+                
+                logger.Info($"{LogPrefix}According to documentation {profile?.ProfileInfo?.Username}'s {skill.Id} is {skill.Progress}.");
+                foreach (var extData in skill.ExtensionData)
+                {
+                    logger.Info($"{LogPrefix}Extension data: {extData.Key} : {extData.Value}");
+                }
+            }
+            //File.WriteAllText("ProfileCreateRequestData.json", json);
+        }
+        logger.Success($"Mod loaded after database!");
+
+        return Task.CompletedTask;
+    }
+}
+#endif
 [Injectable]
 public class CertifiedPMCRoute(JsonUtil jsonUtil, CertifiedPMCPlugin callbacks) : StaticRouter(
     jsonUtil, [
