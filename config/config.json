@@ -1,7 +1,7 @@
 {
   "enabled": true,
   "minSkillLevel": 0,
-  "maxSkillLevel": 3000,
+  "maxSkillLevel": 1500,
   "minMasteringLevel": 0,
   "maxMasteringLevel": 1000,
 
